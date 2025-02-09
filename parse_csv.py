@@ -1,7 +1,5 @@
 import sys
 import csv
-import os
-import codecs
 
 # ✅ Force UTF-8 encoding for Windows CMD
 sys.stdout.reconfigure(encoding='utf-8')
@@ -24,10 +22,11 @@ try:
     headers = data[0]
     rows = data[1:]
 
-    print("\n🎯 Processed CSV Data:")
-    print(headers)
-    for row in rows:
-        print(row)
+    print("\n🎯 Processed CSV Data as Key-Value Pairs:\n")
+
+    for i, row in enumerate(rows, start=1):
+        row_data = {headers[j]: row[j].replace('\n', ' ') for j in range(len(headers))}
+        print(f"🔹 Row {i}: {row_data}")
 
 except Exception as e:
     print(f"❌ ERROR: {e}")
