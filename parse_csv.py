@@ -18,6 +18,10 @@ REQUIRED_FIELDS = {
     "Target Server name"
 }
 
+def clean_value(value):
+    """Removes non-ASCII and special characters from extracted values."""
+    return value.replace('\n', ' ').encode("ascii", "ignore").decode()
+
 if len(sys.argv) < 2:
     print("❌ ERROR: No CSV file provided!")
     sys.exit(1)
@@ -36,9 +40,9 @@ try:
     headers = data[0]
     row = data[1]  # Since there's only one row
 
-    # Create a dictionary filtering only required fields
+    # Create a dictionary filtering only required fields and cleaning values
     filtered_data = {
-        header: row[i].replace('\n', ' ')  # Remove newlines from values
+        header: clean_value(row[i])  # ✅ Ensure ASCII-compatible output
         for i, header in enumerate(headers) if header in REQUIRED_FIELDS
     }
 
