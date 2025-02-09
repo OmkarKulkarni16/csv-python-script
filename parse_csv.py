@@ -1,5 +1,10 @@
 import sys
 import csv
+import os
+import codecs
+
+# ✅ Force UTF-8 encoding for Windows CMD
+sys.stdout.reconfigure(encoding='utf-8')
 
 if len(sys.argv) < 2:
     print("❌ ERROR: No CSV file provided!")
