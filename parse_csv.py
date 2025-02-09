@@ -20,13 +20,13 @@ try:
         sys.exit(1)
 
     headers = data[0]
-    rows = data[1:]
+    row = data[1]  # Since there's only one row
 
-    print("\n🎯 Processed CSV Data as Key-Value Pairs:\n")
-
-    for i, row in enumerate(rows, start=1):
-        row_data = {headers[j]: row[j].replace('\n', ' ') for j in range(len(headers))}
-        print(f"🔹 Row {i}: {row_data}")
+    print("\n🎯 Processed CSV Data:\n")
+    
+    for header, value in zip(headers, row):
+        clean_value = value.replace('\n', ' ')  # Remove newlines
+        print(f"{header}: {clean_value}")
 
 except Exception as e:
     print(f"❌ ERROR: {e}")
