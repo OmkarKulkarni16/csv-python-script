@@ -20,7 +20,7 @@ REQUIRED_FIELDS = {
 
 def clean_value(value):
     """Removes non-ASCII and special characters from extracted values."""
-    return value.replace('\n', ' ').encode("ascii", "ignore").decode()
+    return value.replace('\n', ' ').strip().encode("ascii", "ignore").decode()
 
 if len(sys.argv) < 2:
     print("❌ ERROR: No CSV file provided!")
@@ -48,7 +48,7 @@ try:
 
     print("\n🎯 Processed CSV Data (Filtered Fields):\n")
     for key, value in filtered_data.items():
-        print(f"{key}: {value}")
+        print(f"{key}: {value}")  # ✅ Logs extracted values
 
 except Exception as e:
     print(f"❌ ERROR: {e}")
