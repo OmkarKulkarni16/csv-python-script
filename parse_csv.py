@@ -4,6 +4,20 @@ import csv
 # ✅ Force UTF-8 encoding for Windows CMD
 sys.stdout.reconfigure(encoding='utf-8')
 
+# Define the required fields to extract
+REQUIRED_FIELDS = {
+    "API Name",
+    "Service Endpoint/URI in Policy Manager",
+    "API Category (HIGH/MEDIUM/LOW)",
+    "Backend Service URL for Routing",
+    "Fields Captured from Request for logging (Variable_Name = JSONPath)",
+    "Fields Captured from Response for logging",
+    "API Gateway Error Structure",
+    "Response Field for success validation",
+    "Success response",
+    "Target Server name"
+}
+
 if len(sys.argv) < 2:
     print("❌ ERROR: No CSV file provided!")
     sys.exit(1)
@@ -22,11 +36,15 @@ try:
     headers = data[0]
     row = data[1]  # Since there's only one row
 
-    print("\n🎯 Processed CSV Data:\n")
-    
-    for header, value in zip(headers, row):
-        clean_value = value.replace('\n', ' ')  # Remove newlines
-        print(f"{header}: {clean_value}")
+    # Create a dictionary filtering only required fields
+    filtered_data = {
+        header: row[i].replace('\n', ' ')  # Remove newlines from values
+        for i, header in enumerate(headers) if header in REQUIRED_FIELDS
+    }
+
+    print("\n🎯 Processed CSV Data (Filtered Fields):\n")
+    for key, value in filtered_data.items():
+        print(f"{key}: {value}")
 
 except Exception as e:
     print(f"❌ ERROR: {e}")
