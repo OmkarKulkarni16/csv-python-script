@@ -3,7 +3,6 @@ import csv
 import re
 from urllib.parse import urlparse
 
-
 sys.stdout.reconfigure(encoding='utf-8')
 
 REQUIRED_FIELDS = {
@@ -54,21 +53,17 @@ try:
     headers = data[0]
     row = data[1]  # Since there's only one row
 
-
     filtered_data = {
         header: clean_value(row[i])  
         for i, header in enumerate(headers) if header in REQUIRED_FIELDS
     }
 
-
     backend_url = filtered_data.get("Backend Service URL for Routing", "")
     hostname, port, backend_path = extract_url_parts(backend_url)
-
 
     print("Processed CSV Data (Filtered Fields):")
     for key, value in filtered_data.items():
         print(f"{key}: {value}") 
-
 
     if hostname and backend_path:
         print("Extracted URL Components:")
@@ -78,10 +73,12 @@ try:
     else:
         print("Warning: Unable to extract hostname, port, or backend path from the URL.")
 
-    print(f"FINAL EXTRACTION RESULT:")
-    print(f"HOSTNAME={hostname}")
-    print(f"PORT={port}")
-    print(f"BACKEND_PATH={backend_path}")
+    with open("extracted_values.txt", "w") as f:
+        f.write(f"HOSTNAME={hostname}\n")
+        f.write(f"PORT={port}\n")
+        f.write(f"BACKEND_PATH={backend_path}\n")
+
+    print("Extracted values saved to 'extracted_values.txt' for Jenkins.")
 
 except Exception as e:
     print(f"ERROR: {e}")
