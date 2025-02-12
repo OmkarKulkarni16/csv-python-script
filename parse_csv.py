@@ -10,7 +10,7 @@ REQUIRED_FIELDS = {
     "Service Endpoint/URI in Policy Manager",
     "API Category (HIGH/MEDIUM/LOW)",
     "Backend Service URL for Routing",
-    "Fields Captured from Request for logging (Variable_Name = JSONPath)",
+    "Fields Captured from Request for logging",
     "Fields Captured from Response for logging",
     "API Gateway Error Structure",
     "Response Field for success validation",
