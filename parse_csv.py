@@ -10,7 +10,7 @@ REQUIRED_FIELDS = {
     "Service Endpoint/URI in Policy Manager",
     "API Category (HIGH/MEDIUM/LOW)",
     "Backend Service URL for Routing",
-    "Fields Captured from Request for logging",  # ✅ Ensure request fields are included
+    "Fields Captured from Request for logging",  # ✅ Ensure this field is extracted
     "Fields Captured from Response for logging",
     "API Gateway Error Structure",
     "Response Field for success validation",
@@ -53,9 +53,23 @@ try:
 
     # Extract required fields
     filtered_data = {
-        header: clean_value(row[i])
+        header: clean_value(row[i]) if i < len(row) else "N/A"
         for i, header in enumerate(headers) if header in REQUIRED_FIELDS
     }
+
+    # ✅ Explicitly check if "Fields Captured from Request for logging" exists
+    request_logging_fields = filtered_data.get("Fields Captured from Request for logging", "N/A")
+    if request_logging_fields.strip() == "":
+        request_logging_fields = "N/A"  # Prevent blank values
+
+    # ✅ Print to Jenkins logs
+    print("📝 Fields Captured from Request for Logging:")
+    print(f"🔹 {request_logging_fields}")
+
+    # ✅ Extract and Print Response Logging Fields Separately
+    response_logging_fields = filtered_data.get("Fields Captured from Response for logging", "N/A")
+    print("📄 Fields Captured from Response for Logging:")
+    print(f"🔹 {response_logging_fields}")
 
     # Extract Hostname, Port, and Backend Path
     backend_url = filtered_data.get("Backend Service URL for Routing", "")
@@ -64,16 +78,6 @@ try:
     print("📄 Processed CSV Data (Filtered Fields):")
     for key, value in filtered_data.items():
         print(f"🔹 {key}: {value}")
-
-    # ✅ Extract and Print Request Logging Fields Separately
-    request_logging_fields = filtered_data.get("Fields Captured from Request for logging", "N/A")
-    print("📝 Fields Captured from Request for Logging:")
-    print(request_logging_fields)
-
-    # ✅ Extract and Print Response Logging Fields Separately
-    response_logging_fields = filtered_data.get("Fields Captured from Response for logging", "N/A")
-    print("📄 Fields Captured from Response for Logging:")
-    print(response_logging_fields)
 
     if hostname and backend_path:
         print("🌍 Extracted URL Components:")
@@ -87,6 +91,8 @@ try:
     with open("extracted_values.txt", "w") as f:
         for key, value in filtered_data.items():
             f.write(f"{key.upper().replace(' ', '_')}={value}\n")
+        f.write(f"FIELDS_CAPTURED_FROM_REQUEST_FOR_LOGGING={request_logging_fields}\n")  # ✅ Ensure it's saved
+        f.write(f"FIELDS_CAPTURED_FROM_RESPONSE_FOR_LOGGING={response_logging_fields}\n")
         f.write(f"HOSTNAME={hostname}\n")
         f.write(f"PORT={port}\n")
         f.write(f"BACKEND_PATH={backend_path}\n")
