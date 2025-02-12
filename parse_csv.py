@@ -10,7 +10,7 @@ REQUIRED_FIELDS = {
     "Service Endpoint/URI in Policy Manager",
     "API Category (HIGH/MEDIUM/LOW)",
     "Backend Service URL for Routing",
-    "Fields Captured from Request for logging",
+    "Fields Captured from Request for logging",  # ✅ Ensure request fields are included
     "Fields Captured from Response for logging",
     "API Gateway Error Structure",
     "Response Field for success validation",
@@ -61,17 +61,27 @@ try:
     backend_url = filtered_data.get("Backend Service URL for Routing", "")
     hostname, port, backend_path = extract_url_parts(backend_url)
 
-    print("Processed CSV Data (Filtered Fields):")
+    print("📄 Processed CSV Data (Filtered Fields):")
     for key, value in filtered_data.items():
-        print(f"{key}: {value}")
+        print(f"🔹 {key}: {value}")
+
+    # ✅ Extract and Print Request Logging Fields Separately
+    request_logging_fields = filtered_data.get("Fields Captured from Request for logging", "N/A")
+    print("📝 Fields Captured from Request for Logging:")
+    print(request_logging_fields)
+
+    # ✅ Extract and Print Response Logging Fields Separately
+    response_logging_fields = filtered_data.get("Fields Captured from Response for logging", "N/A")
+    print("📄 Fields Captured from Response for Logging:")
+    print(response_logging_fields)
 
     if hostname and backend_path:
-        print("Extracted URL Components:")
-        print(f"Hostname: {hostname}")
-        print(f"Port: {port}")
-        print(f"Backend Path: {backend_path}")
+        print("🌍 Extracted URL Components:")
+        print(f"🔹 Hostname: {hostname}")
+        print(f"🔹 Port: {port}")
+        print(f"🔹 Backend Path: {backend_path}")
     else:
-        print("Warning: Unable to extract hostname, port, or backend path from the URL.")
+        print("⚠️ Warning: Unable to extract hostname, port, or backend path from the URL.")
 
     # ✅ Save extracted values to a file for Jenkins
     with open("extracted_values.txt", "w") as f:
@@ -84,5 +94,5 @@ try:
     print("✅ Extracted values saved to 'extracted_values.txt' for Jenkins.")
 
 except Exception as e:
-    print(f"ERROR: {e}")
+    print(f"❌ ERROR: {e}")
     sys.exit(1)
